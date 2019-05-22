@@ -41,12 +41,12 @@ assert($serializer->json() === $json);
 // =======================================
 // json warpper only
 $serialized = $json
-    ->setDepth(512)
-    ->setOptions(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+    ->setDepth(512) // default
+    ->setOptions(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) // default JSON_UNESCAPED_UNICODE 
     ->encode($data);
 $unserialized = $json
-    ->setDepth(512)
-    ->setOptions(JSON_OBJECT_AS_ARRAY)
+    ->setDepth(512) // default
+    ->setOptions(JSON_OBJECT_AS_ARRAY) // default
     ->decode($serialized);
 
 ```
