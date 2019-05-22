@@ -46,7 +46,7 @@ $serialized = $json
     ->encode($data);
 $unserialized = $json
     ->setDepth(512)
-    ->setOptions()
+    ->setOptions(JSON_OBJECT_AS_ARRAY)
     ->decode($serialized);
 
 ```
