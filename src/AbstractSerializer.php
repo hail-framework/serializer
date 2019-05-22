@@ -3,15 +3,13 @@
 
 namespace Hail\Serializer;
 
-
-use Hail\Serializer\Exception\UnserializationException;
 use Hail\Serializer\Serializer\ObjectSerializer;
 
-trait ObjectTrait
+abstract class AbstractSerializer implements SerializerInterface
 {
     protected $serializeObject = false;
 
-    public function withObject(): self
+    public function withObject(): SerializerInterface
     {
         $this->serializeObject = true;
 

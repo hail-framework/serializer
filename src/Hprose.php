@@ -7,10 +7,9 @@ use Hail\Singleton\SingletonTrait;
 
 \defined('HPROSE_EXTENSION') || \define('HPROSE_EXTENSION', \extension_loaded('hprose'));
 
-class Hprose
+class Hprose extends AbstractSerializer
 {
-    use SingletonTrait,
-        ObjectTrait;
+    use SingletonTrait;
 
     protected function init()
     {

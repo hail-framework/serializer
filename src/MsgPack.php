@@ -7,10 +7,9 @@ use Hail\Singleton\SingletonTrait;
 
 \defined('MSGPACK_EXTENSION') || \define('MSGPACK_EXTENSION', \extension_loaded('msgpack'));
 
-class MsgPack
+class MsgPack extends AbstractSerializer
 {
-    use SingletonTrait,
-        ObjectTrait;
+    use SingletonTrait;
 
     protected function init()
     {

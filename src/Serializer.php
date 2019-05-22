@@ -34,10 +34,8 @@ use Hail\Serializer\Exception\SerializerException;
  * @method Serialize php()
  * @method Yaml yaml()
  */
-final class Serializer
+final class Serializer extends AbstractSerializer
 {
-    use ObjectTrait;
-
     private const MAP = [
         'msgpack' => MsgPack::class,
         'igbinary' => Igbinary::class,

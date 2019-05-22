@@ -8,10 +8,9 @@ use Symfony\Component\Yaml\Yaml as SymfonyYaml;
 
 \defined('YAML_EXTENSION') || \define('YAML_EXTENSION', \extension_loaded('yaml'));
 
-class Yaml
+class Yaml extends AbstractSerializer
 {
-    use SingletonTrait,
-        ObjectTrait;
+    use SingletonTrait;
 
     protected function init(): void
     {

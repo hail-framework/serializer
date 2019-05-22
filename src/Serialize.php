@@ -4,10 +4,9 @@ namespace Hail\Serializer;
 
 use Hail\Singleton\SingletonTrait;
 
-class Serialize
+class Serialize extends AbstractSerializer
 {
-    use SingletonTrait,
-        ObjectTrait;
+    use SingletonTrait;
 
     protected function doEncode($value): string
     {

@@ -6,10 +6,9 @@ use Hail\Serializer\Exception\SerializationException;
 use Hail\Serializer\Exception\UnserializationException;
 use Hail\Singleton\SingletonTrait;
 
-class Json
+class Json extends AbstractSerializer
 {
-    use SingletonTrait,
-        ObjectTrait;
+    use SingletonTrait;
 
     private $depth = 512;
     private $options;

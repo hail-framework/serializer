@@ -7,10 +7,9 @@ use Hail\Singleton\SingletonTrait;
 
 \defined('IGBINARY_EXTENSION') || \define('IGBINARY_EXTENSION', \extension_loaded('igbinary'));
 
-class Igbinary
+class Igbinary extends AbstractSerializer
 {
-    use SingletonTrait,
-        ObjectTrait;
+    use SingletonTrait;
 
     protected function init()
     {
