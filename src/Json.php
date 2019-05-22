@@ -32,7 +32,6 @@ class Json extends AbstractSerializer
         }
 
         $options = $this->options | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION;
-        $this->options = null;
 
         // php >= 7.3
 //        try {
@@ -47,6 +46,8 @@ class Json extends AbstractSerializer
             );
         }
 
+        $this->reset();
+
         return $json;
     }
 
@@ -58,7 +59,6 @@ class Json extends AbstractSerializer
 
         $options = $this->options | JSON_BIGINT_AS_STRING;
         $assoc = ($options & JSON_OBJECT_AS_ARRAY) !== 0;
-        $this->options = null;
 
         // php >= 7.3
 //        try {
@@ -73,6 +73,14 @@ class Json extends AbstractSerializer
             );
         }
 
+        $this->reset();
+
         return $decode;
+    }
+
+    protected function reset(): void
+    {
+        $this->depth = 512;
+        $this->options = null;
     }
 }
