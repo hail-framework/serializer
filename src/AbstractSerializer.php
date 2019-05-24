@@ -9,18 +9,22 @@ abstract class AbstractSerializer implements SerializerInterface
 {
     protected $serializeObject = false;
 
+    private $objectSerializer;
+
     public function withObject(): SerializerInterface
     {
-        $this->serializeObject = true;
+        if ($this->objectSerializer === null) {
+            $this->objectSerializer = clone $this;
+            $this->objectSerializer->serializeObject = true;
+        }
 
-        return $this;
+        return $this->objectSerializer;
     }
 
     public function encode($value): string
     {
         if ($this->serializeObject) {
             $value = ObjectSerializer::serialize($value);
-            $this->serializeObject = false;
         }
 
         return $this->doEncode($value);
@@ -32,7 +36,6 @@ abstract class AbstractSerializer implements SerializerInterface
 
         if ($this->serializeObject) {
             $decode = ObjectSerializer::unserialize($decode);
-            $this->serializeObject = false;
         }
 
         return $decode;

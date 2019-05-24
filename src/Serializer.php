@@ -85,7 +85,7 @@ final class Serializer extends AbstractSerializer
             throw new SerializerException('Serializer type not defined: ' . $name);
         }
 
-        return $this->$name = new (self::MAP[$name])();
+        return $this->$name = (self::MAP[$name])::getInstance();
     }
 
     public function __call($name, $arguments)

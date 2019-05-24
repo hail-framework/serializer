@@ -3,17 +3,6 @@
 ## Example
 ```php
 $data = ['a' => 1, 'b' => 2];
- 
-// wrapper of Hprose/Igbinary/Json/MsgPack/Serialize/Yaml
-use Hail\Serializer\Json;
-$json = Json::getInstance();
-$serialized = $json->encode($data);
-$unserialized = $json->decode($serialized);
-
-assert($data === $unserialized);
-
-// =======================================
-
 use Hail\Serializer\Serializer;
 
 // msgpack/igbinary/hprose/json/php/yaml
@@ -29,10 +18,21 @@ assert($data === $unserialized);
 $example = function ($a) {
     return $a * 2;
 };
-$serialized = $serializer->withObject()->encode($example);
-$unserialized = $serializer->withObject()->decode($serialized);
+$objectSerializer = $serializer->withObject(); // clone a new instance
+$serialized = $objectSerializer->encode($example);
+$unserialized = $objectSerializer->decode($serialized);
 
 assert($unserialized(2) === 4);
+
+// =======================================
+ 
+// wrapper of Hprose/Igbinary/Json/MsgPack/Serialize/Yaml
+use Hail\Serializer\Json;
+$json = Json::getInstance();
+$serialized = $json->encode($data);
+$unserialized = $json->decode($serialized);
+
+assert($data === $unserialized);
 
 // =======================================
 assert($serializer->json === $json);
@@ -49,4 +49,5 @@ $unserialized = $json
     ->setOptions(JSON_OBJECT_AS_ARRAY) // default
     ->decode($serialized);
 
+// after encode/decode depths and options will restore to default
 ```
