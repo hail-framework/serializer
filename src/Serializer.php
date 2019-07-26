@@ -7,17 +7,17 @@ use Hail\Serializer\Exception\SerializerException;
 \defined('FUNCTION_ENV') || \define('FUNCTION_ENV', \function_exists('\\env'));
 
 /**
- * 小数组
- * 尺寸:     msgpack < swoole = swoole(fast) < igbinary < json < hprose < serialize
- * 序列化速度:   swoole(fast) << serialize < msgpack < json < swoole << igbinary << hprose
- * 反序列化速度: swoole ~ swoole(fast) << igbinary < msgpack < serialize < hprose << json
+ * small array
+ * size:         msgpack < swoole = swoole(fast) < igbinary < json < hprose < serialize
+ * encode speed: swoole(fast) << serialize < msgpack < json < swoole << igbinary << hprose
+ * decode speed: swoole ~ swoole(fast) << igbinary < msgpack < serialize < hprose << json
  *
- * 大数组
- * 尺寸:     swoole < igbinary << hprose << msgpack < swoole(fast) < json << serialize
- * 序列化速度:   swoole(fast) < swoole << msgpack < serialize < igbinary =< json < hprose
- * 反序列化速度: swoole(fast) < swoole << igbinary < hprose < serialize < msgpack << json
+ * big array
+ * size:         swoole < igbinary << hprose << msgpack < swoole(fast) < json << serialize
+ * encode speed: swoole(fast) < swoole << msgpack < serialize < igbinary =< json < hprose
+ * decode speed: swoole(fast) < swoole << igbinary < hprose < serialize < msgpack << json
  *
- * swoole serialize 尺寸小，速度快但是官方已经放弃继续支持 PHP7.3+
+ * swoole serialize not support > PHP7.3
  */
 
 /**
