@@ -4,8 +4,6 @@ namespace Hail\Serializer;
 
 use Hail\Serializer\Exception\SerializerException;
 
-\defined('FUNCTION_ENV') || \define('FUNCTION_ENV', \function_exists('\\env'));
-
 /**
  * small array
  * size:         msgpack < swoole = swoole(fast) < igbinary < json < hprose < serialize
@@ -52,7 +50,7 @@ final class Serializer extends AbstractSerializer
 
     public function __construct(string $type = null)
     {
-        $type = $type ?? self::env('HAIL_SERIALIZER_TYPE') ?? 'php';
+        $type = $type ?? (\getenv('HAIL_SERIALIZER_TYPE') ?: 'php');
 
         if (!isset(self::MAP[$type])) {
             throw new SerializerException('Serializer type not defined: ' . $type);
@@ -61,19 +59,6 @@ final class Serializer extends AbstractSerializer
         $this->default = $type;
     }
 
-    private static function env(string $name)
-    {
-        if (FUNCTION_ENV) {
-            return \env($name);
-        }
-
-        $value = \getenv($name);
-        if ($value === false) {
-            return null;
-        }
-
-        return $value;
-    }
 
     public function __get($name)
     {
