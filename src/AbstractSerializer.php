@@ -43,4 +43,9 @@ abstract class AbstractSerializer implements SerializerInterface
 
     abstract protected function doEncode($value): string;
     abstract protected function doDecode(string $value);
+
+    public function __destruct()
+    {
+        $this->objectSerializer = null;
+    }
 }
