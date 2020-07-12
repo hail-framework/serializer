@@ -31,19 +31,12 @@ class Json extends AbstractSerializer
             $this->options = JSON_UNESCAPED_UNICODE;
         }
 
-        $options = $this->options | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION;
+        $options = $this->options | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_THROW_ON_ERROR;
 
-        // php >= 7.3
-//        try {
-//            $json = \json_encode($value, $options | JSON_THROW_ON_ERROR);
-//        } catch (\JsonException $e) {
-//            throw new SerializationException('JSON encode error', $e);
-//        }
-        $json = \json_encode($value, $options, $this->depth);
-        if (JSON_ERROR_NONE !== ($error = \json_last_error())) {
-            throw new SerializationException('JSON encode error',
-                new \RuntimeException(\json_last_error_msg(), $error)
-            );
+        try {
+            $json = \json_encode($value, $options);
+        } catch (\JsonException $e) {
+            throw new SerializationException('JSON encode error', $e);
         }
 
         $this->reset();
@@ -57,20 +50,13 @@ class Json extends AbstractSerializer
             $this->options = JSON_OBJECT_AS_ARRAY;
         }
 
-        $options = $this->options | JSON_BIGINT_AS_STRING;
+        $options = $this->options | JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR;
         $assoc = ($options & JSON_OBJECT_AS_ARRAY) !== 0;
 
-        // php >= 7.3
-//        try {
-//            $decode = \json_decode($json, $assoc, $this->depth, $options);
-//        } catch (\JsonException $e) {
-//            throw new UnserializationException('JSON decode error', $e);
-//        }
-        $decode = \json_decode($json, $assoc, $this->depth, $options);
-        if (JSON_ERROR_NONE !== ($error = \json_last_error())) {
-            throw new UnserializationException('JSON decode error',
-                new \RuntimeException(\json_last_error_msg(), $error)
-            );
+        try {
+            $decode = \json_decode($json, $assoc, $this->depth, $options);
+        } catch (\JsonException $e) {
+            throw new UnserializationException('JSON decode error', $e);
         }
 
         $this->reset();
