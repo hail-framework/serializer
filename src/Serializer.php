@@ -6,31 +6,28 @@ use Hail\Serializer\Exception\SerializerException;
 
 /**
  * small array
- * size:         msgpack < swoole = swoole(fast) < igbinary < json < hprose < serialize
- * encode speed: swoole(fast) << serialize < msgpack < json < swoole << igbinary << hprose
- * decode speed: swoole ~ swoole(fast) << igbinary < msgpack < serialize < hprose << json
+ * size:         msgpack < igbinary < json < hprose < serialize
+ * encode speed: serialize <= msgpack <= json <= igbinary < hprose
+ * decode speed: igbinary < msgpack < serialize < hprose << json
  *
  * big array
- * size:         swoole < igbinary << hprose << msgpack < swoole(fast) < json << serialize
- * encode speed: swoole(fast) < swoole << msgpack < serialize < igbinary =< json < hprose
- * decode speed: swoole(fast) < swoole << igbinary < hprose < serialize < msgpack << json
- *
- * swoole serialize not support > PHP7.3
+ * size:         igbinary << hprose << msgpack < json << serialize
+ * encode speed: igbinary < serialize < json < msgpack < hprose
+ * decode speed: igbinary < hprose < serialize < msgpack << json
  */
 
 /**
- * @property-read MsgPack   $msgpak
- * @property-read Igbinary  $igbinary
- * @property-read Hprose    $hprose
- * @property-read Json      $json
+ * @property-read MsgPack $msgpak
+ * @property-read Igbinary $igbinary
+ * @property-read Hprose $hprose
+ * @property-read Json $json
  * @property-read Serialize $php
- * @property-read Yaml      $yaml
+ *
  * @method MsgPack msgpak()
  * @method Igbinary igbinary()
  * @method Hprose hprose()
  * @method Json json()
  * @method Serialize php()
- * @method Yaml yaml()
  */
 final class Serializer extends AbstractSerializer
 {
@@ -40,7 +37,6 @@ final class Serializer extends AbstractSerializer
         'hprose' => Hprose::class,
         'json' => Json::class,
         'php' => Serialize::class,
-        'yaml' => Yaml::class,
     ];
 
     /**

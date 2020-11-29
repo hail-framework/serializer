@@ -3,6 +3,7 @@
 namespace Hail\Serializer;
 
 use Hail\Singleton\SingletonTrait;
+use Opis\Closure\SerializableClosure;
 
 class Serialize extends AbstractSerializer
 {
@@ -15,6 +16,10 @@ class Serialize extends AbstractSerializer
 
     protected function doDecode(string $value)
     {
+        if ($this->serializeClosure) {
+            return \unserialize($value, ['allowed_classes' => [SerializableClosure::class]]);
+        }
+
         return \unserialize($value, ['allowed_classes' => false]);
     }
 }

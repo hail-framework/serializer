@@ -21,8 +21,12 @@
   },
   "license": "MIT",
   "require": {
-    "php": ">=7.3.0",
+    "php": ">=7.4",
     "ext-json": "*",
-    "hail/singleton": "^1.0.0"
+    "hail/singleton": "^1.0.0",
+    "opis/closure": "^3.6.1"
+  },
+  "suggest": {
+    "ext-igbinary": "Better serializer"
   }
 }

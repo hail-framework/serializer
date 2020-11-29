@@ -3,40 +3,37 @@
 
 namespace Hail\Serializer;
 
-use Hail\Serializer\Serializer\ObjectSerializer;
+use Opis\Closure\SerializableClosure;
 
 abstract class AbstractSerializer implements SerializerInterface
 {
-    protected $serializeObject = false;
+    protected bool $serializeClosure = false;
 
-    private $objectSerializer;
-
-    public function withObject(): SerializerInterface
+    public function withClosure(bool $withClosure = true): self
     {
-        if ($this->objectSerializer === null) {
-            $this->objectSerializer = clone $this;
-            $this->objectSerializer->serializeObject = true;
-        }
+        $this->serializeClosure = $withClosure;
 
-        return $this->objectSerializer;
+        return $this;
     }
 
-    public function encode($value): string
+    final public function encode($value): string
     {
-        if ($this->serializeObject) {
-            $value = ObjectSerializer::serialize($value);
+        if ($this->serializeClosure && $value instanceof \Closure) {
+            $value = new SerializableClosure($value);
         }
+        $this->serializeClosure = false;
 
         return $this->doEncode($value);
     }
 
-    public function decode(string $value)
+    final public function decode(string $value)
     {
         $decode = $this->doDecode($value);
 
-        if ($this->serializeObject) {
-            $decode = ObjectSerializer::unserialize($decode);
+        if ($this->serializeClosure && $decode instanceof SerializableClosure) {
+            $decode = $decode->getClosure();
         }
+        $this->serializeClosure = false;
 
         return $decode;
     }

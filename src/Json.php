@@ -10,17 +10,27 @@ class Json extends AbstractSerializer
 {
     use SingletonTrait;
 
-    private $depth = 512;
-    private $options;
+    private int $depth = 512;
 
-    public function setDepth(int $depth)
+    private ?int $options;
+
+    public function withClosure(bool $withClosure = true): self
+    {
+        if ($withClosure === true) {
+            throw new \RuntimeException('JSON does not support encode \Closure');
+        }
+
+        return $this;
+    }
+
+    public function setDepth(int $depth): self
     {
         $this->depth = $depth;
 
         return $this;
     }
 
-    public function setOptions(int $options)
+    public function setOptions(int $options): self
     {
         $this->options = $options;
     }
