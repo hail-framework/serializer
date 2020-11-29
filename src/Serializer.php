@@ -39,10 +39,7 @@ final class Serializer extends AbstractSerializer
         'php' => Serialize::class,
     ];
 
-    /**
-     * @var string
-     */
-    private $default;
+    private string $default;
 
     public function __construct(string $type = null)
     {

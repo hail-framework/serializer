@@ -14,15 +14,6 @@ class Json extends AbstractSerializer
 
     private ?int $options;
 
-    public function withClosure(bool $withClosure = true): self
-    {
-        if ($withClosure === true) {
-            throw new \RuntimeException('JSON does not support encode \Closure');
-        }
-
-        return $this;
-    }
-
     public function setDepth(int $depth): self
     {
         $this->depth = $depth;
@@ -37,6 +28,10 @@ class Json extends AbstractSerializer
 
     protected function doEncode($value): string
     {
+        if (\is_object($value)) {
+            throw new \RuntimeException('JSON does not support encode object');
+        }
+
         if ($this->options === null) {
             $this->options = JSON_UNESCAPED_UNICODE;
         }

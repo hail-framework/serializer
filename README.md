@@ -14,13 +14,12 @@ assert($data === $unserialized);
 
 // =======================================
 
-// serialize PHP Object, includes Closure 
+// serialize \Closure 
 $example = function ($a) {
     return $a * 2;
 };
-$objectSerializer = $serializer->withObject(); // clone a new instance
-$serialized = $objectSerializer->encode($example);
-$unserialized = $objectSerializer->decode($serialized);
+$serialized = $serializer->withClosure()->encode($example);
+$unserialized = $serializer->withClosure()->decode($serialized);
 
 assert($unserialized(2) === 4);
 
