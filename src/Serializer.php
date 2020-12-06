@@ -17,7 +17,7 @@ use Hail\Serializer\Exception\SerializerException;
  */
 
 /**
- * @property-read MsgPack $msgpak
+ * @property-read MsgPack $msgpack
  * @property-read Igbinary $igbinary
  * @property-read Hprose $hprose
  * @property-read Json $json
@@ -31,44 +31,44 @@ use Hail\Serializer\Exception\SerializerException;
  */
 final class Serializer extends AbstractSerializer
 {
-    private const MAP = [
-        'msgpack' => MsgPack::class,
-        'igbinary' => Igbinary::class,
-        'hprose' => Hprose::class,
-        'json' => Json::class,
-        'php' => Serialize::class,
-    ];
-
-    private string $default;
+    private SerializerInterface $default;
 
     public function __construct(string $type = null)
     {
-        $type = $type ?? (\getenv('HAIL_SERIALIZER_TYPE') ?: 'php');
-
-        if (!isset(self::MAP[$type])) {
-            throw new SerializerException('Serializer type not defined: ' . $type);
+        if ($type === null) {
+            $env = \getenv('HAIL_SERIALIZER_TYPE');
+            $type = \is_string($env) ? $env : 'php';
         }
 
-        $this->default = $type;
+        $this->default = $this->$type;
     }
-
 
     public function __get($name)
     {
-        if (!isset(self::MAP[$name])) {
-            throw new SerializerException('Serializer type not defined: ' . $name);
-        }
+        switch ($name) {
+            case 'igbinary':
+                return $this->igbinary = igbinary::getInstance();
 
-        return $this->$name = (self::MAP[$name])::getInstance();
+            case 'msgpack':
+                return $this->msgpack = msgpack::getInstance();
+
+            case 'hprose':
+                return $this->hprose = hprose::getInstance();
+
+            case 'php':
+                return $this->php = Serialize::getInstance();
+
+            case 'json':
+                return $this->json = Json::getInstance();
+
+            default:
+                throw new SerializerException('Serializer type not defined: ' . $name);
+        }
     }
 
     public function __call($name, $arguments)
     {
-        if (isset(static::MAP[$name])) {
-            return $this->$name;
-        }
-
-        throw new SerializerException('Serializer type not defined: ' . $name);
+        return $this->$name;
     }
 
     /**
@@ -78,7 +78,7 @@ final class Serializer extends AbstractSerializer
      */
     protected function doEncode($value): string
     {
-        return $this->{$this->default}->encode($value);
+        return $this->default->encode($value);
     }
 
     /**
@@ -88,6 +88,6 @@ final class Serializer extends AbstractSerializer
      */
     protected function doDecode(string $value)
     {
-        return $this->{$this->default}->decode($value);
+        return $this->default->decode($value);
     }
 }

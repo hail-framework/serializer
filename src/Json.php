@@ -2,8 +2,7 @@
 
 namespace Hail\Serializer;
 
-use Hail\Serializer\Exception\SerializationException;
-use Hail\Serializer\Exception\UnserializationException;
+use Hail\Serializer\Exception\SerializerException;
 use Hail\Singleton\SingletonTrait;
 
 class Json extends AbstractSerializer
@@ -14,16 +13,18 @@ class Json extends AbstractSerializer
 
     private ?int $options;
 
-    public function setDepth(int $depth): self
+    public function withDepth(int $depth): self
     {
         $this->depth = $depth;
 
         return $this;
     }
 
-    public function setOptions(int $options): self
+    public function withOptions(int $options): self
     {
         $this->options = $options;
+
+        return $this;
     }
 
     protected function doEncode($value): string
@@ -41,7 +42,7 @@ class Json extends AbstractSerializer
         try {
             $json = \json_encode($value, $options);
         } catch (\JsonException $e) {
-            throw new SerializationException('JSON encode error', $e);
+            throw new SerializerException('JSON encode error', $e);
         }
 
         $this->reset();
@@ -61,7 +62,7 @@ class Json extends AbstractSerializer
         try {
             $decode = \json_decode($json, $assoc, $this->depth, $options);
         } catch (\JsonException $e) {
-            throw new UnserializationException('JSON decode error', $e);
+            throw new SerializerException('JSON decode error', $e);
         }
 
         $this->reset();
